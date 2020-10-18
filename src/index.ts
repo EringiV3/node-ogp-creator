@@ -144,21 +144,3 @@ export const createOGP = (options: options) => {
   renderToCanvas(ctx, options);
   exportFile(canvas, options.path);
 };
-
-(() => {
-  createOGP({
-    title: "GatsbyでmicroCMSのプレビュー機能対応",
-    userName: "eringiV3",
-    path: "public/ogp/hoge.png",
-    width: 640,
-    height: 480,
-    styles: {
-      backgroudColor: "#fff",
-      textColor: "black",
-      font: "sans-serif",
-      fontSize: 30,
-      userNamePositionX: 450,
-      userNamePositionY: 400,
-    },
-  });
-})();
