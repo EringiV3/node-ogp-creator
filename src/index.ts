@@ -1,7 +1,7 @@
 import { createCanvas, CanvasRenderingContext2D, Canvas } from "canvas";
 import fs from "fs-extra";
 import { options } from "./types/index";
-import { segmentString } from "./utils/index";
+import { segmentString, countChar } from "./utils/index";
 
 /**
  * Canvasへの描画処理を行います
@@ -46,15 +46,16 @@ function renderTitle(
   fontSize: number,
   ctx: CanvasRenderingContext2D
 ): void {
-  const paddingRight = 80,
-    paddingLeft = 80;
-  const widhtlExcludedPadding = width - paddingLeft - paddingRight;
-  const maxStringCount = Math.floor(widhtlExcludedPadding / fontSize);
-  const splitedTitle = getSplitedTitle(title, maxStringCount);
-  const splitedTitleLineCount = splitedTitle.length;
-  const startHeight = (height - fontSize * splitedTitleLineCount) / 2;
+  const paddingRight: number = 80,
+    paddingLeft: number = 80;
+  const widhtlExcludedPadding: number = width - paddingLeft - paddingRight;
+  const maxStringCount: number =
+    Math.floor(widhtlExcludedPadding / fontSize) * 2; // 全角は2文字としてカウントするので2倍
+  const splitedTitle: string[] = getSplitedTitle(title, maxStringCount);
+  const splitedTitleLineCount: number = splitedTitle.length;
+  const startHeight: number = (height - fontSize * splitedTitleLineCount) / 2;
   splitedTitle.map((value: string, index: number) => {
-    const y =
+    const y: number =
       index === 0
         ? startHeight + index * fontSize
         : startHeight + index * fontSize + 10;
@@ -76,7 +77,7 @@ export function getSplitIndexes(
   for (let index = 0; index < segmentedTitle.length; index++) {
     const value = segmentedTitle[index];
     tmp += value;
-    if (tmp.length > maxStringCount) {
+    if (countChar(tmp) > maxStringCount) {
       splitIndexes.push(index);
       tmp = value;
     }
@@ -95,8 +96,11 @@ export function getSplitedTitle(
   maxStringCount: number
 ): string[] {
   const segmentedTitle: string[] = segmentString(title);
-  const splitIndexes = getSplitIndexes(segmentedTitle, maxStringCount);
-  let splitedTitle = [];
+  const splitIndexes: number[] = getSplitIndexes(
+    segmentedTitle,
+    maxStringCount
+  );
+  let splitedTitle: string[] = [];
   for (let index = 0; index < splitIndexes.length; index++) {
     const splitIndex: number = splitIndexes[index];
     const words: string[] =
@@ -132,12 +136,12 @@ function exportFile(canvas: Canvas, path: string) {
 
 // あとでheight, widthはcondigから受け取るようにする
 (() => {
-  const width = 640;
-  const height = 480;
+  const width: number = 640;
+  const height: number = 480;
   const canvas = createCanvas(width, height);
   const ctx = canvas.getContext("2d");
   renderToCanvas(ctx, {
-    title: "Typescript + Node.jsの練習",
+    title: "GatsbyでmicroCMSのプレビュー機能対応",
     userName: "eringiV3",
     path: "public/ogp/hoge.png",
     width,
