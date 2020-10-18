@@ -9,25 +9,25 @@ import { segmentString, countChar } from "./utils/index";
  * @param options
  */
 function renderToCanvas(ctx: CanvasRenderingContext2D, options: options) {
-  ctx.font = `${options.styles.fontSize}px ${
-    options.styles.font || "sans-serif"
+  ctx.font = `${options.styles?.fontSize || 30}px ${
+    options.styles?.font || "sans-serif"
   }`;
-  ctx.fillStyle = options.styles.backgroudColor || "#fff";
+  ctx.fillStyle = options.styles?.backgroudColor || "#fff";
   ctx.fillRect(0, 0, options.width, options.height);
-  ctx.fillStyle = options.styles.textColor || "black";
+  ctx.fillStyle = options.styles?.textColor || "black";
 
   renderTitle(
     options.width,
     options.height,
     options.title,
-    options.styles.fontSize,
+    options.styles?.fontSize || 30,
     ctx
   );
 
   ctx.fillText(
     `@${options.userName}`,
-    options.styles.userNamePositionX || 450,
-    options.styles.userNamePositionY || 400
+    options.styles?.userNamePositionX || 450,
+    options.styles?.userNamePositionY || 400
   );
 }
 
@@ -115,7 +115,6 @@ export function getSplitedTitle(
       )
     );
   }
-  console.log({ splitIndexes, segmentedTitle, splitedTitle });
   return splitedTitle;
 }
 

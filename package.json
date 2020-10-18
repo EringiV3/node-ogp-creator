@@ -1,7 +1,7 @@
 {
   "name": "node-ogp-creator",
   "version": "0.1.0",
-  "description": "",
+  "description": "node.js環境で動くOGPジェネレーターです",
   "main": "dist/index.js",
   "scripts": {
     "dev": "ts-node src/index.ts",
@@ -14,9 +14,19 @@
     "test:watch": "jest --watch",
     "prepublishOnly": "npm-run-all clean tsc"
   },
-  "keywords": [],
+  "keywords": [
+    "node",
+    "ogp"
+  ],
   "author": "eringi_v3",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/EringiV3/node-ogp-creator"
+  },
+  "bugs": {
+    "url": "https://github.com/EringiV3/node-ogp-creator/issues"
+  },
   "devDependencies": {
     "@types/fs-extra": "^9.0.2",
     "@types/jest": "^26.0.14",
