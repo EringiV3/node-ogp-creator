@@ -1,16 +1,23 @@
-# typescript-node-base
+# node-ogp-creator
 
-* TypeScript + Node.js project boilerplate
+Node.js 環境で動く OGP ジェネレーターです。
 
 # Usage
 
 ```bash
-git clone https://github.com/notakaos/typescript-node-base.git
-cd typescript-node-base
 npm install
-npm run dev
 ```
 
-# License
+```typescript
+import { createOGP } from "node-ogp-creator";
 
-[ISC License](./LICENSE)
+createOGP({
+  title: "title_example_hogea",
+  userName: "eringiV3",
+  path: "public/ogp/hoge.png",
+});
+```
+
+## License
+
+MIT

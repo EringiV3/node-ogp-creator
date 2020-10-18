@@ -1,5 +1,5 @@
 {
-  "name": "typescript-node-base",
+  "name": "node-ogp-creator",
   "version": "0.1.0",
   "description": "",
   "main": "dist/index.js",
@@ -14,8 +14,8 @@
     "test:watch": "jest --watch"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "EringiV3",
+  "license": "MIT",
   "devDependencies": {
     "@types/jest": "^26.0.14",
     "@types/node": "^12.12.54",

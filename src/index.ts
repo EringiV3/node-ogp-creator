@@ -68,7 +68,7 @@ function renderTitle(
  * @param segmentedTitle
  * @param maxStringCount
  */
-export function getSplitIndexes(
+function getSplitIndexes(
   segmentedTitle: string[],
   maxStringCount: number
 ): number[] {
@@ -134,18 +134,24 @@ function exportFile(canvas: Canvas, path: string) {
   fs.writeFile(path, binaryData, "binary");
 }
 
-// あとでheight, widthはcondigから受け取るようにする
-(() => {
-  const width: number = 640;
-  const height: number = 480;
-  const canvas = createCanvas(width, height);
+/**
+ * OGP画像を生成します
+ * @param options
+ */
+export const createOGP = (options: options) => {
+  const canvas = createCanvas(options.width, options.height);
   const ctx = canvas.getContext("2d");
-  renderToCanvas(ctx, {
+  renderToCanvas(ctx, options);
+  exportFile(canvas, options.path);
+};
+
+(() => {
+  createOGP({
     title: "GatsbyでmicroCMSのプレビュー機能対応",
     userName: "eringiV3",
     path: "public/ogp/hoge.png",
-    width,
-    height,
+    width: 640,
+    height: 480,
     styles: {
       backgroudColor: "#fff",
       textColor: "black",
@@ -155,25 +161,4 @@ function exportFile(canvas: Canvas, path: string) {
       userNamePositionY: 400,
     },
   });
-  exportFile(canvas, "public/ogp/hoge.png");
 })();
-
-/**
- * export const createOGP = (options) => {
- *    const canvas = createCanvas(width, height);
- *    const ctx = canvas.getContext("2d");
- *    renderToCanvas(ctx, options);
- *    exportFile(canvas, options.path);
- * }
- */
-
-/**
- * usage
- *
- * import { createOGP } from 'node-ogp-creator';
- * createOGP({
- *     title: "title_example_hogea",
- *     userName: "eringiV3",
- *     path: "public/ogp/hoge.png",
- * })
- */
