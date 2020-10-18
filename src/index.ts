@@ -3,6 +3,11 @@ import fs from "fs-extra";
 import { options } from "./types/index";
 const TinySegmenter = require("tiny-segmenter");
 
+/**
+ * Canvasへの描画処理を行います
+ * @param ctx
+ * @param options
+ */
 function renderToCanvas(ctx: CanvasRenderingContext2D, options: options) {
   ctx.font = `${options.styles.fontSize}px ${
     options.styles.font || "sans-serif"
@@ -26,6 +31,14 @@ function renderToCanvas(ctx: CanvasRenderingContext2D, options: options) {
   );
 }
 
+/**
+ * タイトルを描画します
+ * @param width
+ * @param height
+ * @param title
+ * @param fontSize
+ * @param ctx
+ */
 function renderTitle(
   width: number,
   height: number,
@@ -36,17 +49,24 @@ function renderTitle(
   const paddingRight = 80,
     paddingLeft = 80;
   const widhtlExcludedPadding = width - paddingLeft - paddingRight;
-  const splitedTitle = getSplitedTitle(
-    title,
-    Math.floor(widhtlExcludedPadding / fontSize)
-  );
+  const maxStringCount = Math.floor(widhtlExcludedPadding / fontSize);
+  const splitedTitle = getSplitedTitle(title, maxStringCount);
   const splitedTitleLineCount = splitedTitle.length;
   const startHeight = (height - fontSize * splitedTitleLineCount) / 2;
   splitedTitle.map((value: string, index: number) => {
-    ctx.fillText(value, paddingLeft, startHeight + index * fontSize);
+    const y =
+      index === 0
+        ? startHeight + index * fontSize
+        : startHeight + index * fontSize + 10;
+    ctx.fillText(value, paddingLeft, y);
   });
 }
 
+/**
+ * 形態素解析によって自然な単語区切りに分割されたタイトル文字列の配列を取得します
+ * @param title
+ * @param maxStringCount
+ */
 function getSplitedTitle(title: string, maxStringCount: number): string[] {
   const segmentedTitle: string[] = new TinySegmenter().segment(title);
   let splitIndexes: number[] = [];
@@ -68,7 +88,6 @@ function getSplitedTitle(title: string, maxStringCount: number): string[] {
       index === 0
         ? segmentedTitle.slice(0, splitIndex)
         : segmentedTitle.slice(splitIndexes[index - 1], splitIndex);
-    console.log({ words });
     splitedTitle.push(
       words.reduce(
         (previousValue: string, currentValue: string) =>
@@ -81,6 +100,11 @@ function getSplitedTitle(title: string, maxStringCount: number): string[] {
   return splitedTitle;
 }
 
+/**
+ * pngファイルに結果を出力します
+ * @param canvas
+ * @param path
+ */
 function exportFile(canvas: Canvas, path: string) {
   const body: string = canvas.toDataURL();
   const base64Data: string = body.replace(/^data:image\/png;base64,/, "");
