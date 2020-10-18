@@ -63,14 +63,16 @@ function renderTitle(
 }
 
 /**
- * 形態素解析によって自然な単語区切りに分割されたタイトル文字列の配列を取得します
- * @param title
+ * 形態素解析された文字列を、maxStringCount以内になるように分割可能なindexの配列を取得します
+ * @param segmentedTitle
  * @param maxStringCount
  */
-function getSplitedTitle(title: string, maxStringCount: number): string[] {
-  const segmentedTitle: string[] = new TinySegmenter().segment(title);
+function getSplitIndexes(
+  segmentedTitle: string[],
+  maxStringCount: number
+): number[] {
   let splitIndexes: number[] = [];
-  let tmp = "";
+  let tmp: string = "";
   for (let index = 0; index < segmentedTitle.length; index++) {
     const value = segmentedTitle[index];
     tmp += value;
@@ -80,7 +82,17 @@ function getSplitedTitle(title: string, maxStringCount: number): string[] {
     }
   }
   splitIndexes.push(segmentedTitle.length);
+  return splitIndexes;
+}
 
+/**
+ * 形態素解析によって自然な単語区切りに分割されたタイトル文字列の配列を取得します
+ * @param title
+ * @param maxStringCount
+ */
+function getSplitedTitle(title: string, maxStringCount: number): string[] {
+  const segmentedTitle: string[] = new TinySegmenter().segment(title);
+  const splitIndexes = getSplitIndexes(segmentedTitle, maxStringCount);
   let splitedTitle = [];
   for (let index = 0; index < splitIndexes.length; index++) {
     const splitIndex: number = splitIndexes[index];
