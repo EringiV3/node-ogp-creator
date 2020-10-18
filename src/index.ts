@@ -1,6 +1,7 @@
 import { createCanvas, CanvasRenderingContext2D, Canvas } from "canvas";
 import fs from "fs-extra";
 import { options } from "./types/index";
+const TinySegmenter = require("tiny-segmenter");
 
 function renderToCanvas(ctx: CanvasRenderingContext2D, options: options) {
   ctx.font = `${options.styles.fontSize}px ${
@@ -35,17 +36,49 @@ function renderTitle(
   const paddingRight = 80,
     paddingLeft = 80;
   const widhtlExcludedPadding = width - paddingLeft - paddingRight;
-  const maxStringCount = Math.floor(widhtlExcludedPadding / fontSize);
-  let splitedTitle = [];
-  for (let i = 0; i < title.length / maxStringCount; i++) {
-    splitedTitle.push(title.substr(i * maxStringCount, maxStringCount));
-  }
+  const splitedTitle = getSplitedTitle(
+    title,
+    Math.floor(widhtlExcludedPadding / fontSize)
+  );
   const splitedTitleLineCount = splitedTitle.length;
   const startHeight = (height - fontSize * splitedTitleLineCount) / 2;
-
   splitedTitle.map((value: string, index: number) => {
     ctx.fillText(value, paddingLeft, startHeight + index * fontSize);
   });
+}
+
+function getSplitedTitle(title: string, maxStringCount: number): string[] {
+  const segmentedTitle: string[] = new TinySegmenter().segment(title);
+  let splitIndexes: number[] = [];
+  let tmp = "";
+  for (let index = 0; index < segmentedTitle.length; index++) {
+    const value = segmentedTitle[index];
+    tmp += value;
+    if (tmp.length > maxStringCount) {
+      splitIndexes.push(index);
+      tmp = value;
+    }
+  }
+  splitIndexes.push(segmentedTitle.length);
+
+  let splitedTitle = [];
+  for (let index = 0; index < splitIndexes.length; index++) {
+    const splitIndex: number = splitIndexes[index];
+    const words: string[] =
+      index === 0
+        ? segmentedTitle.slice(0, splitIndex)
+        : segmentedTitle.slice(splitIndexes[index - 1], splitIndex);
+    console.log({ words });
+    splitedTitle.push(
+      words.reduce(
+        (previousValue: string, currentValue: string) =>
+          `${previousValue}${currentValue}`,
+        ""
+      )
+    );
+  }
+  console.log({ splitIndexes, segmentedTitle, splitedTitle });
+  return splitedTitle;
 }
 
 function exportFile(canvas: Canvas, path: string) {
@@ -67,7 +100,7 @@ function exportFile(canvas: Canvas, path: string) {
   const canvas = createCanvas(width, height);
   const ctx = canvas.getContext("2d");
   renderToCanvas(ctx, {
-    title: "Gatsby で microCMSのプレビュー機能対応",
+    title: "GatsbyでmicroCMSのプレビュー機能対応",
     userName: "eringiV3",
     path: "public/ogp/hoge.png",
     width,

@@ -25,6 +25,7 @@
   "dependencies": {
     "@types/fs-extra": "^9.0.2",
     "canvas": "^2.6.1",
-    "fs-extra": "^9.0.1"
+    "fs-extra": "^9.0.1",
+    "tiny-segmenter": "^0.2.0"
   }
 }
