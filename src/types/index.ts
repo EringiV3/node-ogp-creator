@@ -10,7 +10,7 @@ export type options = {
     font?: string;
     backgroudColor?: string;
     textColor?: string;
-    fontSize?: string;
+    fontSize: number;
     userNamePositionX?: number;
     userNamePositionY?: number;
   };

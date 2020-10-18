@@ -9,8 +9,15 @@ function renderToCanvas(ctx: CanvasRenderingContext2D, options: options) {
   ctx.fillStyle = options.styles.backgroudColor || "#fff";
   ctx.fillRect(0, 0, options.width, options.height);
   ctx.fillStyle = options.styles.textColor || "black";
-  const [x, y] = getTitlePosition(options.width, options.height, options.title);
-  ctx.fillText(options.title, x, y);
+
+  renderTitle(
+    options.width,
+    options.height,
+    options.title,
+    options.styles.fontSize,
+    ctx
+  );
+
   ctx.fillText(
     `@${options.userName}`,
     options.styles.userNamePositionX || 450,
@@ -18,13 +25,27 @@ function renderToCanvas(ctx: CanvasRenderingContext2D, options: options) {
   );
 }
 
-// TODO implement
-function getTitlePosition(
+function renderTitle(
   width: number,
   height: number,
-  title: string
-): number[] {
-  return [320, 240];
+  title: string,
+  fontSize: number,
+  ctx: CanvasRenderingContext2D
+): void {
+  const paddingRight = 80,
+    paddingLeft = 80;
+  const widhtlExcludedPadding = width - paddingLeft - paddingRight;
+  const maxStringCount = Math.floor(widhtlExcludedPadding / fontSize);
+  let splitedTitle = [];
+  for (let i = 0; i < title.length / maxStringCount; i++) {
+    splitedTitle.push(title.substr(i * maxStringCount, maxStringCount));
+  }
+  const splitedTitleLineCount = splitedTitle.length;
+  const startHeight = (height - fontSize * splitedTitleLineCount) / 2;
+
+  splitedTitle.map((value: string, index: number) => {
+    ctx.fillText(value, paddingLeft, startHeight + index * fontSize);
+  });
 }
 
 function exportFile(canvas: Canvas, path: string) {
@@ -46,7 +67,7 @@ function exportFile(canvas: Canvas, path: string) {
   const canvas = createCanvas(width, height);
   const ctx = canvas.getContext("2d");
   renderToCanvas(ctx, {
-    title: "title_example_hogea",
+    title: "Gatsby で microCMSのプレビュー機能対応",
     userName: "eringiV3",
     path: "public/ogp/hoge.png",
     width,
@@ -55,7 +76,7 @@ function exportFile(canvas: Canvas, path: string) {
       backgroudColor: "#fff",
       textColor: "black",
       font: "sans-serif",
-      fontSize: "30px",
+      fontSize: 30,
       userNamePositionX: 450,
       userNamePositionY: 400,
     },
