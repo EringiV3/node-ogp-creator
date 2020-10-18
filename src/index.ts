@@ -1,7 +1,7 @@
 import { createCanvas, CanvasRenderingContext2D, Canvas } from "canvas";
 import fs from "fs-extra";
 import { options } from "./types/index";
-const TinySegmenter = require("tiny-segmenter");
+import { segmentString } from "./utils/index";
 
 /**
  * Canvasへの描画処理を行います
@@ -67,7 +67,7 @@ function renderTitle(
  * @param segmentedTitle
  * @param maxStringCount
  */
-function getSplitIndexes(
+export function getSplitIndexes(
   segmentedTitle: string[],
   maxStringCount: number
 ): number[] {
@@ -90,8 +90,11 @@ function getSplitIndexes(
  * @param title
  * @param maxStringCount
  */
-function getSplitedTitle(title: string, maxStringCount: number): string[] {
-  const segmentedTitle: string[] = new TinySegmenter().segment(title);
+export function getSplitedTitle(
+  title: string,
+  maxStringCount: number
+): string[] {
+  const segmentedTitle: string[] = segmentString(title);
   const splitIndexes = getSplitIndexes(segmentedTitle, maxStringCount);
   let splitedTitle = [];
   for (let index = 0; index < splitIndexes.length; index++) {
@@ -124,9 +127,7 @@ function exportFile(canvas: Canvas, path: string) {
     "binary"
   );
   fs.mkdirSync(path.split("/").slice(0, -1).join("/"), { recursive: true });
-  fs.writeFile(path, binaryData, "binary", (err: any) => {
-    console.log(err);
-  });
+  fs.writeFile(path, binaryData, "binary");
 }
 
 // あとでheight, widthはcondigから受け取るようにする
@@ -136,7 +137,7 @@ function exportFile(canvas: Canvas, path: string) {
   const canvas = createCanvas(width, height);
   const ctx = canvas.getContext("2d");
   renderToCanvas(ctx, {
-    title: "GatsbyでmicroCMSのプレビュー機能対応",
+    title: "Typescript + Node.jsの練習",
     userName: "eringiV3",
     path: "public/ogp/hoge.png",
     width,
