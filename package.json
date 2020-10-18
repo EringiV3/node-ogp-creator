@@ -11,12 +11,14 @@
     "build": "npm-run-all clean tsc",
     "start": "node .",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "prepublishOnly": "npm-run-all clean tsc"
   },
   "keywords": [],
-  "author": "EringiV3",
+  "author": "eringi_v3",
   "license": "MIT",
   "devDependencies": {
+    "@types/fs-extra": "^9.0.2",
     "@types/jest": "^26.0.14",
     "@types/node": "^12.12.54",
     "jest": "^26.5.3",
@@ -28,7 +30,6 @@
     "typescript": "^3.9.7"
   },
   "dependencies": {
-    "@types/fs-extra": "^9.0.2",
     "canvas": "^2.6.1",
     "fs-extra": "^9.0.1",
     "tiny-segmenter": "^0.2.0"
