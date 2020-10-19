@@ -143,9 +143,11 @@ function exportFile(canvas: Canvas, path: string) {
  * @param options
  */
 export const createOGP = (options: options) => {
-  registerFont(options.fontPath ?? "fonts/NotoSansCJKjp-Regular.otf", {
-    family: options.styles?.font ?? "Noto Sans CJK JP",
-  });
+  if (options.fontPath && options.styles?.font) {
+    registerFont(options.fontPath, {
+      family: options.styles.font,
+    });
+  }
   const canvas = createCanvas(options.width, options.height);
   const ctx = canvas.getContext("2d");
   renderToCanvas(ctx, options);
