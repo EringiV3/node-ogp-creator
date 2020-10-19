@@ -1,4 +1,9 @@
-import { createCanvas, CanvasRenderingContext2D, Canvas } from "canvas";
+import {
+  createCanvas,
+  CanvasRenderingContext2D,
+  Canvas,
+  registerFont,
+} from "canvas";
 import fs from "fs-extra";
 import { options } from "./types/index";
 import { segmentString, countChar } from "./utils/index";
@@ -9,12 +14,12 @@ import { segmentString, countChar } from "./utils/index";
  * @param options
  */
 function renderToCanvas(ctx: CanvasRenderingContext2D, options: options) {
-  ctx.font = `${options.styles?.fontSize || 30}px ${
-    options.styles?.font || "sans-serif"
-  }`;
   ctx.fillStyle = options.styles?.backgroudColor || "#fff";
   ctx.fillRect(0, 0, options.width, options.height);
   ctx.fillStyle = options.styles?.textColor || "black";
+  ctx.font = `${options.styles?.fontSize || 30}px ${
+    options.styles?.font || "Noto Sans CJK JP"
+  }`;
 
   renderTitle(
     options.width,
@@ -26,8 +31,8 @@ function renderToCanvas(ctx: CanvasRenderingContext2D, options: options) {
 
   ctx.fillText(
     `@${options.userName}`,
-    options.styles?.userNamePositionX || 450,
-    options.styles?.userNamePositionY || 400
+    options.styles?.userNamePositionX || 400,
+    options.styles?.userNamePositionY || 360
   );
 }
 
@@ -138,6 +143,9 @@ function exportFile(canvas: Canvas, path: string) {
  * @param options
  */
 export const createOGP = (options: options) => {
+  registerFont(options.fontPath ?? "fonts/NotoSansCJKjp-Regular.otf", {
+    family: options.styles?.font ?? "Noto Sans CJK JP",
+  });
   const canvas = createCanvas(options.width, options.height);
   const ctx = canvas.getContext("2d");
   renderToCanvas(ctx, options);

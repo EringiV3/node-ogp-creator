@@ -4,6 +4,7 @@ export type options = {
   userName: string;
   width: number;
   height: number;
+  fontPath?: string;
   styles?: {
     font?: string;
     backgroudColor?: string;
